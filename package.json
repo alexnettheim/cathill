@@ -1,0 +1,11 @@
+{
+  "name": "cathill",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:data": "node scripts/build-data.js",
+    "build:ride": "node scripts/build-ride.js",
+    "test": "node test-block-engine.js && node test-calendar.js && node test-workout-sources.js && node test-ride-handoff.js && node test-ride-dashboard.js && node test-settings.js && node test-planner-ui.js && npm --prefix vendor/auuki test -- --runInBand test/integration/workout-finder.test.js test/integration/intervals-auto-upload.test.js test/workouts/zwo.test.js test/ble/wcps.test.js",
+    "test:upstream": "npm --prefix vendor/auuki test -- --runInBand"
+  }
+}

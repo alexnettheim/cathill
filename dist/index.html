@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Plan and ride structured cycling workouts locally with CATHILL.">
+  <meta name="application-name" content="CATHILL">
+  <meta name="theme-color" content="#123C32">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Calendar · CATHILL</title>
+  <link rel="stylesheet" href="planner.css?v=20261024-2">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="index.html">
+      <img class="brand-lockup brand-lockup-light" src="assets/cathill-lockup-horizontal.svg" alt="CATHILL">
+      <img class="brand-lockup brand-lockup-dark" src="assets/cathill-lockup-horizontal-dark.svg" alt="CATHILL">
+      <img class="brand-mark brand-mark-light" src="assets/cathill-mark.svg" alt="CATHILL">
+      <img class="brand-mark brand-mark-dark" src="assets/cathill-mark-reversed.svg" alt="CATHILL">
+    </a>
+    <nav aria-label="Primary navigation"><a class="active" href="index.html">Calendar</a><a href="ride/index.html">Ride</a></nav>
+    <div class="header-actions">
+      <button id="ftpButton" class="quiet-button" type="button">Set FTP</button>
+      <button id="themeButton" class="icon-button" type="button" aria-label="Switch color theme">☼</button>
+      <button id="settingsButton" class="icon-button" type="button" aria-label="Settings">⚙</button>
+    </div>
+  </header>
+
+  <main class="calendar-app">
+    <section class="calendar-toolbar">
+      <div class="month-control">
+        <button id="previousMonth" class="icon-button" type="button" aria-label="Previous month">‹</button>
+        <h1 id="monthTitle"></h1>
+        <button id="nextMonth" class="icon-button" type="button" aria-label="Next month">›</button>
+      </div>
+      <div class="toolbar-actions"><button id="todayButton" class="quiet-button" type="button">Today</button><button id="managePlansButton" class="quiet-button" type="button">Plans</button><button id="buildPlanButton" class="primary-button" type="button">Build plan</button></div>
+    </section>
+
+    <section class="calendar-shell" aria-label="Training calendar">
+      <div class="weekday-row"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Week</span></div>
+      <div id="monthGrid" class="month-grid"></div>
+    </section>
+  </main>
+
+  <aside id="dayPanel" class="side-panel" aria-hidden="true">
+    <div class="panel-header"><div><p class="eyebrow">Selected day</p><h2 id="dayPanelTitle"></h2></div><button class="icon-button" data-close-panel type="button">×</button></div>
+    <div id="dayEvents" class="day-events"></div>
+    <button id="addWorkoutButton" class="primary-button wide" type="button">Add workout</button>
+  </aside>
+  <div id="panelScrim" class="panel-scrim" hidden></div>
+
+  <dialog id="libraryDialog" class="library-dialog">
+    <div class="dialog-header"><div><p class="eyebrow">Workout library</p><h2 id="libraryTitle">Add workout</h2><p id="libraryDate"></p></div><button class="icon-button" data-close="libraryDialog" type="button">×</button></div>
+    <div class="library-tools">
+      <input id="librarySearch" type="search" placeholder="Search name, type, structure, or description…" autocomplete="off">
+      <select id="libraryType" aria-label="Workout type"><option value="">All workout types</option></select>
+      <select id="libraryDuration" aria-label="Workout duration"><option value="">Any duration</option><option value="45">Up to 45 min</option><option value="60">Up to 60 min</option><option value="90">Up to 90 min</option><option value="120">Up to 120 min</option></select>
+      <select id="librarySort" aria-label="Sort workouts"><option value="name">Name A–Z</option><option value="duration-asc">Duration: shortest</option><option value="duration-desc">Duration: longest</option><option value="tss-asc">TSS: lowest</option><option value="tss-desc">TSS: highest</option><option value="intensity-asc">Intensity: lowest</option><option value="intensity-desc">Intensity: highest</option></select>
+    </div>
+    <p id="libraryCount" class="result-count"></p>
+    <div id="libraryResults" class="library-results"></div>
+    <button id="libraryLoadMore" class="quiet-button library-load-more" type="button" hidden>Load more workouts</button>
+  </dialog>
+
+  <dialog id="detailDialog" class="detail-dialog">
+    <button class="icon-button dialog-x" data-close="detailDialog" type="button">×</button>
+    <div id="detailContent"></div>
+  </dialog>
+
+  <dialog id="builderDialog" class="builder-dialog">
+    <div class="dialog-header"><div><p class="eyebrow">Four-week block</p><h2>Build a dated plan</h2><p>Loading weeks progress target-zone time only. Week four reduces volume and TiZ.</p></div><button class="icon-button" data-close="builderDialog" type="button">×</button></div>
+    <div class="builder-layout">
+      <form id="builderForm" class="builder-form">
+        <label>Block name<input id="planName" value="My training block" maxlength="70"></label>
+        <div class="form-pair"><label>Start date<input id="planStart" type="date"></label><label>Week-one hours<input id="planHours" type="number" min="3" max="24" step="0.5" value="7"></label></div>
+        <label>Purpose<select id="planPurpose"><option value="aerobic">Aerobic Base</option><option value="sustained">Sustained Power</option><option value="threshold">Threshold Build</option><option value="vo2">VO₂ / Race Build</option></select></label>
+        <label>Starting TiZ<select id="planStartingTiz"><option value="conservative">Conservative</option><option value="standard" selected>Standard</option><option value="high">High</option></select></label>
+        <fieldset><legend>1 · Choose the days you ride</legend><div id="rideDayChoices" class="day-choices"></div><small>Select at least three days.</small></fieldset>
+        <fieldset><legend>2 · Mark your quality days</legend><div id="qualityDayChoices" class="day-choices"></div><small id="qualityDayHelp">Choose one or two of your riding days.</small></fieldset>
+        <fieldset><legend>3 · Choose the long ride</legend><div id="longDayChoices" class="day-choices"></div><small>Quality days are excluded automatically.</small></fieldset>
+        <div id="scheduleSummary" class="schedule-summary"></div>
+        <p id="builderError" class="form-error" aria-live="polite"></p>
+        <button class="primary-button wide" type="submit">Preview block</button>
+      </form>
+      <section class="plan-preview">
+        <div id="previewEmpty" class="preview-empty">Choose your days and preview the complete block before it changes the calendar.</div>
+        <div id="previewContent" hidden><div id="previewSummary" class="preview-summary"></div><div id="previewWeeks" class="preview-weeks"></div><div class="preview-actions"><button id="previewZwift" class="quiet-button" type="button">Download Zwift ZIP</button><button id="previewIntervals" class="quiet-button" type="button">Send to Intervals.icu</button><button id="applyPlanButton" class="primary-button" type="button">Replace future plan</button></div></div>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog id="ftpDialog" class="small-dialog"><button class="icon-button dialog-x" id="closeFtpDialog" type="button">×</button><p class="eyebrow">Power settings</p><h2>Save your FTP</h2><p>Targets show both % FTP and calculated watts. This remains in this browser.</p><label>Functional threshold power<div class="input-unit"><input id="ftpInput" type="number" min="50" max="600" step="1" placeholder="275"><b>watts</b></div></label><p id="ftpError" class="form-error"></p><button id="saveFtpButton" class="primary-button" type="button">Save FTP</button></dialog>
+
+  <dialog id="settingsDialog" class="small-dialog settings-dialog"><button class="icon-button dialog-x" data-close="settingsDialog" type="button">×</button><p class="eyebrow">Local data</p><h2>Settings & libraries</h2><section class="library-manager"><div class="source-card"><b>Workout libraries</b><span id="sourceCount"></span><small>Remove a source from search and plan building without changing workouts already on your calendar.</small></div><div id="sourceList" class="source-list"></div><div class="library-import"><h3>Import a library</h3><p>Import a JSON library or select one or more ZWO workout files. Everything stays in this browser.</p><label>Library name (optional)<input id="customLibraryName" type="text" maxlength="80" placeholder="My workouts"></label><label>Workout files<input id="customLibraryFiles" type="file" accept=".json,.zwo,application/json,application/xml,text/xml" multiple></label><button id="importLibraryButton" class="primary-button" type="button">Import library</button><p id="libraryStatus" class="form-note" aria-live="polite"></p></div></section><h3>Backup</h3><div class="settings-actions"><button id="exportBackupButton" class="quiet-button" type="button">Export backup</button><label class="quiet-button file-button">Import backup<input id="importBackupInput" type="file" accept="application/json"></label></div><p id="backupStatus" class="form-note"></p></dialog>
+
+  <dialog id="plansDialog" class="small-dialog"><button class="icon-button dialog-x" data-close="plansDialog" type="button">×</button><p class="eyebrow">Calendar plans</p><h2>Manage plans</h2><p>Remove upcoming planned workouts in one step. Past and completed workouts remain on the calendar and completed ride files stay in local history.</p><div id="plansList" class="plans-list"></div></dialog>
+
+  <dialog id="intervalsDialog" class="small-dialog"><button class="icon-button dialog-x" id="closeIntervalsDialog" type="button">×</button><p class="eyebrow">Calendar delivery</p><h2 id="intervalsTitle">Send to Intervals.icu</h2><p id="intervalsCopy"></p><label>Personal API key<input id="intervalsApiKey" type="password" autocomplete="off"></label><label id="intervalsDateLabel">Workout date <input id="intervalsDate" type="date"></label><label class="check-line"><input id="rememberIntervalsKey" type="checkbox">Remember this key in this browser</label><label class="check-line"><input id="autoUploadIntervals" type="checkbox">Automatically upload completed rides</label><p class="form-note">Find the key under Intervals.icu → Settings → Developer Settings.</p><p id="intervalsStatus" class="form-note" aria-live="polite"></p><button id="sendIntervalsButton" class="primary-button" type="button">Send workout</button></dialog>
+
+  <script src="workouts-data.js"></script>
+  <script src="settings.js"></script>
+  <script src="intervals.js"></script>
+  <script src="ride-handoff.js"></script>
+  <script src="workout-library.js"></script>
+  <script src="workout-sources.js"></script>
+  <script src="block-engine.js"></script>
+  <script src="calendar-model.js"></script>
+  <script src="planner.js?v=20261024-2" defer></script>
+</body>
+</html>

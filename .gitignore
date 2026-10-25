@@ -1,0 +1,6 @@
+node_modules/
+vendor/auuki/node_modules/
+vendor/auuki/.parcel-cache/
+test-block.zip
+test-workout.zwo
+.DS_Store

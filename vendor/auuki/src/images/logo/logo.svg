@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">CATHILL app icon</title>
+  <desc id="desc">Park Ascent monogram on a deep green field.</desc>
+  <rect width="1024" height="1024" fill="#123C32"/>
+  <g transform="translate(128 128) scale(1.5)">
+    <g fill="none" stroke="#F3EFE5" stroke-width="72" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="M252 112A154 154 0 1 0 252 400"/>
+      <path d="M374 96v320M252 256h122"/>
+    </g>
+    <path d="M92 300l72-70 60 54 73-91 77 65" fill="none" stroke="#FF5A36" stroke-width="30" stroke-linecap="square" stroke-linejoin="miter"/>
+  </g>
+</svg>

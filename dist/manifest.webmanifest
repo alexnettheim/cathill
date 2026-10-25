@@ -1,0 +1,21 @@
+{
+  "name": "CATHILL",
+  "short_name": "CATHILL",
+  "description": "Plan and ride structured cycling workouts locally.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#10171D",
+  "theme_color": "#123C32",
+  "icons": [
+    {
+      "src": "assets/cathill-app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/cathill-app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

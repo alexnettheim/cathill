@@ -1,0 +1,24 @@
+{
+    "devDependencies": {
+        "@babel/preset-env": "^7.13.12",
+        "@parcel/packager-raw-url": "2.12.0",
+        "@parcel/transformer-webmanifest": "2.12.0",
+        "@babel/core": "^7.13.13",
+        "@babel/node": "^7.13.13",
+        "fake-indexeddb": "^3.1.7",
+        "jest": "^27.4",
+        "parcel": "2.12.0",
+        "process": "^0.11.10"
+    },
+    "source": "src/index.html",
+    "scripts": {
+        "test": "jest",
+        "start": "parcel",
+        "starttls": "parcel --cert ./dev_cert/cert.pem --key ./dev_cert/key.pem",
+        "build": "parcel build",
+        "build:workout-finder": "parcel build src/index.html --dist-dir ../../dist/ride --public-url ./"
+    },
+    "overrides": {
+        "@swc/core": "1.3.36"
+    }
+}
